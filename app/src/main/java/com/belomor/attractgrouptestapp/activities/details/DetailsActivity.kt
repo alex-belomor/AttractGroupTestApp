@@ -1,7 +1,6 @@
 package com.belomor.attractgrouptestapp.activities.details
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -13,14 +12,15 @@ import com.belomor.attractgrouptestapp.models.AttractGroupModel
 import kotlinx.android.synthetic.main.activity_details.*
 
 class DetailsActivity : BaseActivity() {
+
     override fun getLayoutId() = R.layout.activity_details
 
     private val EXTRA_POSITION = "extra_position"
     private val EXTRA_DATA_LIST = "extra_data_list"
 
-    lateinit var pagerAdapter : PagerAdapter
+    private lateinit var pagerAdapter: PagerAdapter
 
-    var dataList : ArrayList<AttractGroupModel>? = null
+    private var dataList: ArrayList<AttractGroupModel>? = null
 
     var currentPosition = 0
 
@@ -57,13 +57,17 @@ class DetailsActivity : BaseActivity() {
 
         })
     }
+
     override fun onSaveInstanceState(outState: Bundle?) {
         outState?.putParcelableArrayList(EXTRA_DATA_LIST, dataList)
         outState?.putInt(EXTRA_POSITION, currentPosition)
         super.onSaveInstanceState(outState)
     }
 
-    inner class PagerAdapter(fm: FragmentManager?, private val listData : ArrayList<AttractGroupModel>) : FragmentStatePagerAdapter(fm) {
+    inner class PagerAdapter(
+        fm: FragmentManager?,
+        private val listData: ArrayList<AttractGroupModel>
+    ) : FragmentStatePagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
             val fragment = DetailsFragment()
@@ -80,7 +84,5 @@ class DetailsActivity : BaseActivity() {
         override fun getCount(): Int {
             return listData.size
         }
-
-
     }
 }

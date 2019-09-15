@@ -1,16 +1,28 @@
 package com.belomor.attractgrouptestapp.activities.main
 
-import android.util.Log
 import com.belomor.attractgrouptestapp.network.HttpAttractListener
 import com.belomor.attractgrouptestapp.network.ServiceAPI
 import okhttp3.Call
-import okhttp3.Response
-import java.io.IOException
+import java.lang.Exception
 
 class MainActivityModel : Model {
 
+    private val calls = ArrayList<Call>()
+
     override fun getList(httpListener: HttpAttractListener) {
-        ServiceAPI.getListData().enqueue(httpListener)
+        val call = ServiceAPI.getListData()
+        calls.add(call)
+        call.enqueue(httpListener)
+    }
+
+    fun cancelAll() {
+        for (call in calls.iterator()) {
+            try {
+                call.cancel()
+            }catch (ex : Exception) {
+                ex.printStackTrace()
+            }
+        }
     }
 
 

@@ -16,7 +16,5 @@ interface Model {
 interface Presenter {
     fun onCreate()
     fun onDestroy()
-    fun onStart()
-    fun onStop()
     fun getList()
 }

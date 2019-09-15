@@ -12,15 +12,7 @@ class MainActivityPresenter(val view: View) : Presenter {
     }
 
     override fun onDestroy() {
-
-    }
-
-    override fun onStart() {
-
-    }
-
-    override fun onStop() {
-
+        model.cancelAll()
     }
 
     override fun getList() {
@@ -36,7 +28,6 @@ class MainActivityPresenter(val view: View) : Presenter {
                 view.isLoading(false)
                 view.onNetworkFailure(message)
             }
-
         })
     }
 }

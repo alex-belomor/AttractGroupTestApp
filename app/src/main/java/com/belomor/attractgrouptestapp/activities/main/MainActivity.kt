@@ -3,6 +3,7 @@ package com.belomor.attractgrouptestapp.activities.main
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -88,6 +89,11 @@ class MainActivity : BaseActivity(), View {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDestroy()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
@@ -134,7 +140,8 @@ class MainActivity : BaseActivity(), View {
         } else {
             savedInstanceState.getParcelableArrayList<AttractGroupModel>(BUNDLE_ADAPTER_STATE)
                 ?.let {
-                    adapter.setData(it)
+                    dataList = it
+                    adapter.setData(dataList!!)
                 }
             list.layoutManager?.onRestoreInstanceState(
                 savedInstanceState.getParcelable(
@@ -148,7 +155,7 @@ class MainActivity : BaseActivity(), View {
         super.onSaveInstanceState(outState)
         val listState = list.layoutManager?.onSaveInstanceState()
         outState?.putParcelable(BUNDLE_LIST_STATE, listState)
-        outState?.putParcelableArrayList(BUNDLE_ADAPTER_STATE, adapter.getData())
+        outState?.putParcelableArrayList(BUNDLE_ADAPTER_STATE, dataList)
     }
 
     override fun isLoading(loading: Boolean) {
