@@ -1,8 +1,8 @@
 package com.belomor.attractgrouptestapp.activities.main
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.ActionBarDrawerToggle
 import com.belomor.attractgrouptestapp.R
 import com.belomor.attractgrouptestapp.activities.BaseActivity
 import com.belomor.attractgrouptestapp.activities.details.DetailsActivity
@@ -22,14 +22,19 @@ class MainActivity : BaseActivity(), View {
     private val BUNDLE_LIST_STATE = "bundle_list_state"
     private val BUNDLE_ADAPTER_STATE = "bundle_list_state"
 
-    private lateinit var presenter : MainActivityPresenter
+    private lateinit var presenter: MainActivityPresenter
 
-    private lateinit var adapter : MainListAdapter
+    private lateinit var adapter: MainListAdapter
+
+    lateinit var hamburgerToggle: ActionBarDrawerToggle
 
     override fun getLayoutId() = R.layout.activity_main
 
     override fun onCreated(savedInstanceState: Bundle?) {
         super.onCreated(savedInstanceState)
+
+        setupToolbar()
+
         presenter = MainActivityPresenter(this)
         presenter.onCreate()
 
@@ -45,13 +50,45 @@ class MainActivity : BaseActivity(), View {
             }
         }
 
+        handleSavedInstanceState(savedInstanceState)
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(toolbar)
+
+        when (toolbar.tag as String) {
+            "normal_portrait", "normal_landscape", "large_portrait" -> {
+                hamburgerToggle =
+                    ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.open, R.string.close)
+
+                drawer_layout.addDrawerListener(hamburgerToggle)
+
+                hamburgerToggle.syncState()
+
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+                supportActionBar?.setDisplayShowHomeEnabled(false)
+            }
+
+            "large_landscape", "xlarge_portrait", "xlarge_landscape" -> {
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            }
+        }
+    }
+
+    private fun handleSavedInstanceState(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             presenter.getList()
         } else {
-            savedInstanceState.getParcelableArrayList<AttractGroupModel>(BUNDLE_ADAPTER_STATE)?.let {
-                adapter.setData(it)
-            }
-            list.layoutManager?.onRestoreInstanceState(savedInstanceState.getParcelable(BUNDLE_LIST_STATE))
+            savedInstanceState.getParcelableArrayList<AttractGroupModel>(BUNDLE_ADAPTER_STATE)
+                ?.let {
+                    adapter.setData(it)
+                }
+            list.layoutManager?.onRestoreInstanceState(
+                savedInstanceState.getParcelable(
+                    BUNDLE_LIST_STATE
+                )
+            )
         }
     }
 
@@ -60,10 +97,6 @@ class MainActivity : BaseActivity(), View {
         val listState = list.layoutManager?.onSaveInstanceState()
         outState?.putParcelable(BUNDLE_LIST_STATE, listState)
         outState?.putParcelableArrayList(BUNDLE_ADAPTER_STATE, adapter.getData())
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
     }
 
     override fun isLoading(loading: Boolean) {
@@ -76,12 +109,17 @@ class MainActivity : BaseActivity(), View {
         }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     override fun onNetworkFailure(message: String) {
         failure.text = message
         failure.show()
     }
 
-    override fun onGetList(dataList : ArrayList<AttractGroupModel>) {
+    override fun onGetList(dataList: ArrayList<AttractGroupModel>) {
         adapter.setData(dataList)
         list.show()
     }

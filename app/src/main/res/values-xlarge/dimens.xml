@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="adapter_main_height">128dp</dimen>
+    <dimen name="adapter_main_vertical_margin_content">12dp</dimen>
+    <dimen name="adapter_main_horizontal_margin_content">12dp</dimen>
+    <dimen name="text_size_large">20sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="fragment_details_imageview_height">500dp</dimen>
+    <dimen name="fragment_details_content_top_margin">12dp</dimen>
+    <dimen name="default_content_margin">32dp</dimen>
+    <dimen name="default_divider_small_width">128dp</dimen>
+</resources>

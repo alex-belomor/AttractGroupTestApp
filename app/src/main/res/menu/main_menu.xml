@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/group_1"
+        android:visible="true"
+        android:menuCategory="container">
+        <item
+            android:id="@+id/group_1_item_1"
+            android:title="@string/title_1"></item>
+
+
+        <item
+            android:id="@+id/group_1_item_2"
+            android:title="@string/title_2"></item>
+    </group>
+
+
+    <group
+        android:id="@+id/group_2"
+        android:visible="true">
+        <item
+            android:id="@+id/group_2_item_1"
+            android:title="@string/title_1"></item>
+
+
+        <item
+            android:id="@+id/group_2_item_2"
+            android:title="@string/title_2"></item>
+    </group>
+</menu>
