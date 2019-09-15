@@ -4,4 +4,6 @@
     <string name="title_2">Title 2</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="search">Search</string>
+    <string name="nothing_found">Nothing found :(</string>
 </resources>

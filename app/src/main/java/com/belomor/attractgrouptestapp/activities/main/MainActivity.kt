@@ -1,8 +1,12 @@
 package com.belomor.attractgrouptestapp.activities.main
 
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.SearchView
 import com.belomor.attractgrouptestapp.R
 import com.belomor.attractgrouptestapp.activities.BaseActivity
 import com.belomor.attractgrouptestapp.activities.details.DetailsActivity
@@ -27,6 +31,9 @@ class MainActivity : BaseActivity(), View {
     private lateinit var adapter: MainListAdapter
 
     lateinit var hamburgerToggle: ActionBarDrawerToggle
+
+    private var dataList: ArrayList<AttractGroupModel>? = null
+    private var dataListFiltered = ArrayList<AttractGroupModel>()
 
     override fun getLayoutId() = R.layout.activity_main
 
@@ -59,21 +66,66 @@ class MainActivity : BaseActivity(), View {
         when (toolbar.tag as String) {
             "normal_portrait", "normal_landscape", "large_portrait" -> {
                 hamburgerToggle =
-                    ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.open, R.string.close)
+                    ActionBarDrawerToggle(
+                        this,
+                        drawer_layout,
+                        toolbar,
+                        R.string.open,
+                        R.string.close
+                    )
 
                 drawer_layout.addDrawerListener(hamburgerToggle)
 
                 hamburgerToggle.syncState()
 
-                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
-                supportActionBar?.setDisplayShowHomeEnabled(false)
             }
 
             "large_landscape", "xlarge_portrait", "xlarge_landscape" -> {
-                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = menu?.findItem(R.id.search)?.actionView as SearchView
+        searchView.setSearchableInfo(
+            searchManager.getSearchableInfo(componentName)
+        )
+
+        searchView.setOnCloseListener {
+            dataList?.let {
+                adapter.setData(it)
+                nothing_found.gone()
+            }
+            false
+        }
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                dataListFiltered = dataList?.filter { model ->
+                    model.name.contains(
+                        newText!!,
+                        true
+                    )
+                } as ArrayList<AttractGroupModel>
+                adapter.setData(dataListFiltered)
+
+                if (dataListFiltered.size == 0)
+                    nothing_found.show()
+                else
+                    nothing_found.gone()
+                return false
+            }
+        })
+        return super.onCreateOptionsMenu(menu)
     }
 
     private fun handleSavedInstanceState(savedInstanceState: Bundle?) {
@@ -119,8 +171,9 @@ class MainActivity : BaseActivity(), View {
         failure.show()
     }
 
-    override fun onGetList(dataList: ArrayList<AttractGroupModel>) {
-        adapter.setData(dataList)
+    override fun onGetList(dl: ArrayList<AttractGroupModel>) {
+        this.dataList = dl
+        adapter.setData(dataList!!)
         list.show()
     }
 }

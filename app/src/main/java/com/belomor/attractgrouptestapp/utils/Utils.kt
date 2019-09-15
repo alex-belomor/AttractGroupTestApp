@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.widget.ImageView
-import com.belomor.attractgrouptestapp.R
 import com.belomor.attractgrouptestapp.view.MyImageView
 import java.io.*
 import java.lang.ref.WeakReference
