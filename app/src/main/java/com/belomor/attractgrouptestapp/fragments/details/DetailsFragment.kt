@@ -25,10 +25,6 @@ class DetailsFragment : BaseFragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-    }
-
     fun setData(element : AttractGroupModel) {
         this.element = element
     }

@@ -3,10 +3,10 @@ package com.belomor.attractgrouptestapp.activities.main
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import com.belomor.attractgrouptestapp.R
 import com.belomor.attractgrouptestapp.activities.BaseActivity
@@ -142,7 +142,10 @@ class MainActivity : BaseActivity(), View {
                 ?.let {
                     dataList = it
                     adapter.setData(dataList!!)
-                }
+                } ?: run {
+                presenter.getList()
+            }
+
             list.layoutManager?.onRestoreInstanceState(
                 savedInstanceState.getParcelable(
                     BUNDLE_LIST_STATE
@@ -162,15 +165,11 @@ class MainActivity : BaseActivity(), View {
         if (loading) {
             loader.show()
             failure.gone()
+            nothing_found.gone()
             list.gone()
         } else {
             loader.gone()
         }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
     }
 
     override fun onNetworkFailure(message: String) {
