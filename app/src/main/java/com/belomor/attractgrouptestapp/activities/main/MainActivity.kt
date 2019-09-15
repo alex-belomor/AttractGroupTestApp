@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import com.belomor.attractgrouptestapp.R
 import com.belomor.attractgrouptestapp.activities.BaseActivity

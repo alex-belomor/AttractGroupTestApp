@@ -6,12 +6,10 @@ import okhttp3.Request
 
 object ServiceAPI {
 
-
-
-    val httpClient = OkHttpClient()
+    private val httpClient = OkHttpClient()
 
     fun init() {
-
+        //TODO There is can add something useful
     }
 
     fun getListData() : Call {

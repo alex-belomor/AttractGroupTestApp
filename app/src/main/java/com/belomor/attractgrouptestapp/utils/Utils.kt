@@ -55,21 +55,11 @@ object Utils {
             reqHeight: Int
         ): Bitmap? {
 
-            // First decode with inJustDecodeBounds=true to check dimensions
             val options = BitmapFactory.Options()
             options.inJustDecodeBounds = true
             val bm = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, options)
 
-//            // Calculate inSampleSize
             options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight)
-//
-//            // close the input stream
-//            inputStream.close()
-//
-//            // reopen the input stream
-//            inputStream = getContentResolver().openInputStream(selectedImage)
-//
-//            // Decode bitmap with inSampleSize set
             options.inJustDecodeBounds = false
             return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, options)
         }
@@ -79,7 +69,6 @@ object Utils {
             reqWidth: Int,
             reqHeight: Int
         ): Int {
-            // Raw height and width of image
             val height = options.outHeight
             val width = options.outWidth
             var inSampleSize = 1
@@ -89,8 +78,6 @@ object Utils {
                 val halfHeight = height / 2
                 val halfWidth = width / 2
 
-                // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-                // height and width larger than the requested height and width.
                 while (halfHeight / inSampleSize > reqHeight && halfWidth / inSampleSize > reqWidth) {
                     inSampleSize *= 2
                 }
@@ -100,7 +87,11 @@ object Utils {
         }
 
         override fun doInBackground(vararg params: String?): Bitmap? {
-            val nameOfImage = params[0]?.replace("/", "_")?.replace(":", "_")?.replace(".", "_")
+            val nameOfImage = params[0]
+                ?.replace("/", "_")
+                ?.replace(":", "_")
+                ?.replace(".", "_")
+
             if (isSavedBitmap(nameOfImage!!)) {
                 return BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().toString() + File.separator + nameOfImage)
             }
